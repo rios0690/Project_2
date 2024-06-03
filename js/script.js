@@ -4,6 +4,7 @@ $(document).ready(function () {
 
 });
 $("#searchInp").on("keyup", function () {
+  $("#personnelTableBody").empty();
   var txt = $("#searchInp").val();
 
   $.ajax({
@@ -12,18 +13,46 @@ $("#searchInp").on("keyup", function () {
     dataType: "json",
     data: { txt },
     success: function (result) {
-      $("#searchInp").val('');
+      
       var resultCode = result.status.code;
 
       console.log(resultCode);
 
       if (resultCode == 200) {
-        populateList();
+        $.each(result.data.found, function (index) {
+          $("#personnelTableBody").append(
+            "<td>", `<tr data-department-id="${result.data.found[index].departmentID}" data-location-id= "${result.data.found[index].locationID}">
+            <td  class="align-middle text-nowrap">
+              ${result.data.found[index].lastName}, ${result.data.found[index].firstName}
+            </td>
+            
+            <td class="align-middle text-nowrap d-none d-md-table-cell">
+            ${result.data.found[index].departmentName}
+            </td>
+            <td class="align-middle text-nowrap d-none d-md-table-cell">
+            ${result.data.found[index].locationName}
+            </td>
+            <td class="align-middle text-nowrap d-none d-md-table-cell">
+            ${result.data.found[index].email}
+            </td>
+            <td class="text-end text-nowrap">
+              <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-id="${result.data.found[index].id}">
+                <i class="fa-solid fa-pencil fa-fw"></i>
+              </button>
+              <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deletePersonnelModal" data-id="${result.data.found[index].id}">
+                <i class="fa-solid fa-trash fa-fw"></i>
+              </button>
+            </td>
+          </tr>`
+
+          );
+        });
+        
       }
 
     },
     error: function (jqXHR, textStatus, errorThrown) {
-      $("#addPersonnelModal").modal("hide");
+      
       console.log("AJAX request failed: " + textStatus, 'error');
     }
 
@@ -55,9 +84,264 @@ $("#refreshBtn").click(function () {
 
 $("#filterBtn").click(function () {
 
+  if ($("#personnelBtn").hasClass("active")) {
+    $("#filterPersonnelModal").modal("show");
+    $("#selectPersonnelDepartment").empty();
+    $("#selectPersonnelLocation").empty();
+    //Populate Departments
+    $.ajax({
+      url:
+        "libs/php/getAllDepartments.php",
+      type: "POST",
+      dataType: "json",
+      success: function (result) {
+        var resultCode = result.status.code;
   
+        if (resultCode == 200) {
+          console.log(result.data);
+          $.each(result.data, function () {
+            $("#selectPersonnelDepartment").append(
+              $("<option>", {
+                value: this.id,
+                text: this.name
+              })
+            );
+          });
+      }
+    }
+    });
+    //Populate Locations
+
+    $.ajax({
+      url:
+        "libs/php/getAllLocations.php",
+      type: "POST",
+      dataType: "json",
+      success: function (result) {
+        var resultCode = result.status.code;
+  
+        if (resultCode == 200) {
+          console.log(result.data);
+          $.each(result.data, function () {
+            $("#selectPersonnelLocation").append(
+              $("<option>", {
+                value: this.id,
+                text: this.name
+              })
+            );
+          });
+      }
+    }
+    });
+    
+    
+  
+ } else {
+
+    if ($("#departmentsBtn").hasClass("active")) {
+      $("#filterDepartmentModal").modal("show");
+      $("#selectDepartmentLocation").empty();
+
+      $.ajax({
+        url:
+          "libs/php/getAllLocations.php",
+        type: "POST",
+        dataType: "json",
+        success: function (result) {
+          var resultCode = result.status.code;
+    
+          if (resultCode == 200) {
+            console.log(result.data);
+            $.each(result.data, function () {
+              $("#selectDepartmentLocation").append(
+                $("<option>", {
+                  value: this.id,
+                  text: this.name
+                })
+              );
+            });
+        }
+      }
+      });
+
+     
+
+    } 
+  }
 
 });
+
+
+//Filter Personnel by departments
+$("#applyFilterPersonnel").click(function () {
+  $("#personnelTableBody").empty();
+  var txt = $("#selectPersonnelDepartment").find(":selected").text();
+  
+
+  $.ajax({
+    url: "libs/php/SearchAll.php",
+    type: "POST",
+    dataType: "json",
+    data: { txt },
+    success: function (result) {
+      $("#filterPersonnelModal").modal("hide");
+      
+      var resultCode = result.status.code;
+
+      if (resultCode == 200) {
+
+        $.each(result.data.found, function (index) {
+          $("#personnelTableBody").append(
+            "<td>", `<tr data-department-id="${result.data.found[index].departmentID}" data-location-id= "${result.data.found[index].locationID}">
+            <td  class="align-middle text-nowrap">
+              ${result.data.found[index].lastName}, ${result.data.found[index].firstName}
+            </td>
+            
+            <td class="align-middle text-nowrap d-none d-md-table-cell">
+            ${result.data.found[index].departmentName}
+            </td>
+            <td class="align-middle text-nowrap d-none d-md-table-cell">
+            ${result.data.found[index].locationName}
+            </td>
+            <td class="align-middle text-nowrap d-none d-md-table-cell">
+            ${result.data.found[index].email}
+            </td>
+            <td class="text-end text-nowrap">
+              <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-id="${result.data.found[index].id}">
+                <i class="fa-solid fa-pencil fa-fw"></i>
+              </button>
+              <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deletePersonnelModal" data-id="${result.data.found[index].id}">
+                <i class="fa-solid fa-trash fa-fw"></i>
+              </button>
+            </td>
+          </tr>`
+
+          );
+        });
+        
+      }
+
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      
+      console.log("AJAX request failed: " + textStatus, 'error');
+    }
+
+  })
+
+})
+
+//Filter Personnel by Location
+$("#applyFilterPersonnelLocation").click(function () {
+  $("#personnelTableBody").empty();
+  var txt = $("#selectPersonnelLocation").find(":selected").text();
+  
+
+  $.ajax({
+    url: "libs/php/SearchAll.php",
+    type: "POST",
+    dataType: "json",
+    data: { txt },
+    success: function (result) {
+      $("#filterPersonnelModal").modal("hide");
+      
+      var resultCode = result.status.code;
+
+      if (resultCode == 200) {
+
+        $.each(result.data.found, function (index) {
+          $("#personnelTableBody").append(
+            "<td>", `<tr data-department-id="${result.data.found[index].departmentID}" data-location-id= "${result.data.found[index].locationID}">
+            <td  class="align-middle text-nowrap">
+              ${result.data.found[index].lastName}, ${result.data.found[index].firstName}
+            </td>
+            
+            <td class="align-middle text-nowrap d-none d-md-table-cell">
+            ${result.data.found[index].departmentName}
+            </td>
+            <td class="align-middle text-nowrap d-none d-md-table-cell">
+            ${result.data.found[index].locationName}
+            </td>
+            <td class="align-middle text-nowrap d-none d-md-table-cell">
+            ${result.data.found[index].email}
+            </td>
+            <td class="text-end text-nowrap">
+              <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-id="${result.data.found[index].id}">
+                <i class="fa-solid fa-pencil fa-fw"></i>
+              </button>
+              <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deletePersonnelModal" data-id="${result.data.found[index].id}">
+                <i class="fa-solid fa-trash fa-fw"></i>
+              </button>
+            </td>
+          </tr>`
+
+          );
+        });
+        
+      }
+
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      
+      console.log("AJAX request failed: " + textStatus, 'error');
+    }
+
+  })
+
+})
+
+//Filter Departments by Location
+$("#applyFilterDepartment").click(function () {
+  $("#departmentTableBody").empty();
+  var txt = $("#selectDepartmentLocation").find(":selected").text();
+  $.ajax({
+    url:
+      "libs/php/getAllDepartments.php",
+    type: "POST",
+    dataType: "json",
+    success: function (result) {
+      var resultCode = result.status.code;
+
+      if (resultCode == 200) {
+        console.log(result.data);
+        $("#filterDepartmentModal").modal("hide");
+
+        $.each(result.data, function (index) {
+          if(txt == result.data[index].location){
+          $("#departmentTableBody").append(
+            "<td>", `<tr data-location-id= "${result.data[index].locationID}">
+            <td  class="align-middle text-nowrap">
+              ${result.data[index].name}
+            </td>
+            
+            ><td class="align-middle text-nowrap d-none d-md-table-cell">
+            ${result.data[index].location}
+            </td>
+            
+            <td class="text-end text-nowrap">
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editDepartmentModal" data-id="${result.data[index].id}">
+            <i class="fa-solid fa-pencil fa-fw"></i>
+          </button>
+          <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteDepartmentModal" data-id="${result.data[index].id}">
+            <i class="fa-solid fa-trash fa-fw"></i>
+          </button>
+            </td>
+          </tr>`
+
+          );
+        }
+        });
+      } else {
+        console.log('error');
+
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      console.log('error');
+
+    }
+  });
+})
 
 $("#addBtn").click(function () {
 

@@ -39,6 +39,59 @@
 
       </div>
 
+      <!--Filter-->
+
+      <div id="filterPersonnelModal" class="modal fade">
+        <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content shadow">
+            <div class="modal-header bg-primary bg-gradient text-white">
+              <h4 class="modal-title">Select filter</h4>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+             
+              <label for="selectPersonnelDepartment"></label>
+              <select id="selectPersonnelDepartment" class="form-select"></select>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary btn-sm myBtn" id="applyFilterPersonnel">APPLY</button>
+                <button type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+              </div>
+      
+              
+              <label for="selectPersonnelLocation"></label>
+              <select id="selectPersonnelLocation" class="form-select"></select>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-primary btn-sm myBtn" id="applyFilterPersonnelLocation">APPLY</button>
+              <button type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
+      
+      <div id="filterDepartmentModal" class="modal fade">
+        <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content shadow">
+            <div class="modal-header bg-primary bg-gradient text-white">
+              <h4 class="modal-title">Select Location</h4>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-start">
+              <label for="selectDepartmentLocation"></label>
+              <select id="selectDepartmentLocation" class="form-select"></select>
+            </div>
+             <div class="modal-footer">
+              <button type="button" class="btn btn-outline-primary btn-sm myBtn" id="applyFilterDepartment">APPLY</button>
+              <button type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
       <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="personnelBtn" data-bs-toggle="tab" data-bs-target="#personnel-tab-pane"
