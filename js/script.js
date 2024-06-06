@@ -1,4 +1,10 @@
-
+$(window).on('load', function () {
+  if ($('#preloader').length) {
+    $('#preloader').delay(1000).fadeOut('slow', function () {
+      $(this).remove();
+    });
+  }
+});
 $(document).ready(function () {
   populateList();
 
@@ -136,7 +142,11 @@ $("#filterBtn").click(function () {
     
     
   
- } else {
+ } else if ($("#locationsBtn").hasClass("active")) {
+  alert("We don't have filters for the location tab, sorry!")
+
+ }
+ else  {
 
     if ($("#departmentsBtn").hasClass("active")) {
       $("#filterDepartmentModal").modal("show");
@@ -930,6 +940,46 @@ $("#deleteDepartmentModal").on("show.bs.modal", function (e) {
 $("#deleteDepartmentForm").on("submit", function (e) {
   e.preventDefault();
   var id = $("#deleteDepartmentID").val();
+
+  $.ajax({
+    url:
+      "libs/php/getEmployeesByDepartment.php",
+    type: "POST",
+    dataType: "json",
+    data: {
+
+      id: id
+    },
+    success: function (result) {
+      var resultCode = result.status.code;
+
+      if (resultCode == 200) {
+        $("#deleteDepartmentModal").modal("hide");
+        
+        if(result.data.department[0].departmentCount>0) {
+          alert(`You can't delete ${result.data.department[0].departmentName}, it has ${result.data.department[0].departmentCount} employess working there.`);
+
+        } else{
+          deleteDepartment(id);
+        }
+        
+        
+      } else {
+        $("#deleteDepartmentModal").modal("hide");
+        $("#deleteDepartmentModal .modal-title").replaceWith(
+          "Error retrieving data"
+        );
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      $("#deleteDepartmentModal").modal("hide");
+      $("#deleteDepartmentModal .modal-title").replaceWith(
+        "Error retrieving data"
+      );
+    }
+  });
+
+function deleteDepartment(id){
   $.ajax({
     url:
       "libs/php/deleteDepartmentByID.php",
@@ -960,6 +1010,7 @@ $("#deleteDepartmentForm").on("submit", function (e) {
       );
     }
   });
+}
 
 })
 
@@ -1091,6 +1142,47 @@ $("#deleteLocationModal").on("show.bs.modal", function (e) {
 $("#deleteLocationForm").on("submit", function (e) {
   e.preventDefault();
   var id = $("#deleteLocationID").val();
+
+  $.ajax({
+    url:
+      "libs/php/getDepartmentsByLocation.php",
+    type: "POST",
+    dataType: "json",
+    data: {
+
+      id: id
+    },
+    success: function (result) {
+      var resultCode = result.status.code;
+
+      if (resultCode == 200) {
+        $("#deleteLocationModal").modal("hide");
+        
+        if(result.data.location[0].locationCount>0) {
+          alert(`You can't delete ${result.data.location[0].locationName}, it has ${result.data.location[0].locationCount} employess working there.`);
+
+        } else{
+          deleteLocation(id);
+        }
+
+        
+      } else {
+        $("#deleteLocatioModal").modal("hide");
+        $("#deletePersonnelModal .modal-title").replaceWith(
+          "Error retrieving data"
+        );
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      $("#deleteLocationModal").modal("hide");
+      $("#deleteLocationModal .modal-title").replaceWith(
+        "Error retrieving data"
+      );
+    }
+  });
+
+
+  function deleteLocation(id){
   $.ajax({
     url:
       "libs/php/deleteLocationByID.php",
@@ -1121,5 +1213,6 @@ $("#deleteLocationForm").on("submit", function (e) {
       );
     }
   });
+}
 
 })
