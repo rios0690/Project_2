@@ -1,9 +1,9 @@
 <?php
 
 	// example use from browser
-	// http://localhost/companydirectory/libs/php/getAllDepartments.php
+	// http://localhost/companydirectory/libs/php/searchAll.php?txt=<txt>
 
-	// remove next two lines for production	
+	// remove next two lines for production
 	
 	ini_set('display_errors', 'On');
 	error_reporting(E_ALL);
@@ -32,13 +32,18 @@
 
 	}	
 
-	// SQL does not accept parameters and so is not prepared
+	// first query - SQL statement accepts parameters and so is prepared to avoid SQL injection.
+	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
-	$query = 'SELECT d.id, d.name, d.locationID, l.name as location FROM department d LEFT JOIN location l ON (d.locationID = l.id) ORDER BY d.name';
+	$query = $conn->prepare('SELECT `p`.`id`, `p`.`firstName`, `p`.`lastName`, `p`.`email`, `p`.`jobTitle`, `d`.`id` as `departmentID`, `d`.`name` AS `departmentName`, `l`.`id` as `locationID`, `l`.`name` AS `locationName` FROM `personnel` `p` LEFT JOIN `department` `d` ON (`d`.`id` = `p`.`departmentID`) LEFT JOIN `location` `l` ON (`l`.`id` = `d`.`locationID`) WHERE `p`.`firstName` LIKE ? OR `p`.`lastName` LIKE ? OR `p`.`email` LIKE ? OR `p`.`jobTitle` LIKE ? OR `d`.`name` LIKE ? OR `l`.`name` LIKE ? ORDER BY `p`.`lastName`, `p`.`firstName`, `d`.`name`, `l`.`name`');
 
-	$result = $conn->query($query);
+  $likeText = "%" . $_REQUEST['txt'] . "%";
+
+  $query->bind_param("ssssss", $likeText, $likeText, $likeText, $likeText, $likeText, $likeText);
+
+	$query->execute();
 	
-	if (!$result) {
+	if (false === $query) {
 
 		$output['status']['code'] = "400";
 		$output['status']['name'] = "executed";
@@ -52,12 +57,14 @@
 		exit;
 
 	}
-   
-  $data = [];
+    
+	$result = $query->get_result();
+
+  $found = [];
 
 	while ($row = mysqli_fetch_assoc($result)) {
 
-		array_push($data, $row);
+		array_push($found, $row);
 
 	}
 
@@ -65,7 +72,7 @@
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "success";
 	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-	$output['data'] = $data;
+	$output['data']['found'] = $found;
 	
 	mysqli_close($conn);
 

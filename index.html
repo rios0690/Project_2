@@ -2,19 +2,20 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <title>Company directory</title>
-    <meta name="description" content="Company Directory">
-    <meta name="author" content="Carlos Fernandez Rios">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <title>Company directory</title>
+  <meta name="description" content="Company Directory">
+  <meta name="author" content="Carlos Fernandez Rios">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <Link href="css\style.css" rel="stylesheet">
+
   <link href="css\bootstrap.min.css" rel="stylesheet">
   <link href="fontawesome\css\all.min.css" rel="stylesheet">
-
+  <Link href="css\style.css" rel="stylesheet">
 </head>
 
 <body>
+
   <div id="preloader"></div>
   <section>
 
@@ -48,56 +49,51 @@
 
       <!--Filter-->
 
-      <div id="filterPersonnelModal" class="modal fade">
+
+      <div id="filterPersonnelModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content shadow">
             <div class="modal-header bg-primary bg-gradient text-white">
-              <h4 class="modal-title">Select filter</h4>
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+              <h4 class="modal-title">Filter employees</h4>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                aria-label="Close"></button>
             </div>
             <div class="modal-body">
-             
+
               <label for="selectPersonnelDepartment"></label>
               <select id="selectPersonnelDepartment" class="form-select"></select>
 
-              <div class="modal-footer">
-                <button type="button" class="btn btn-outline-primary btn-sm myBtn" id="applyFilterPersonnel">APPLY</button>
-                <button type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
-              </div>
-      
-              
               <label for="selectPersonnelLocation"></label>
               <select id="selectPersonnelLocation" class="form-select"></select>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline-primary btn-sm myBtn" id="applyFilterPersonnelLocation">APPLY</button>
               <button type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
             </div>
           </div>
         </div>
       </div>
-      
-      
-      
-      <div id="filterDepartmentModal" class="modal fade">
+
+
+
+      <div id="filterDepartmentModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content shadow">
             <div class="modal-header bg-primary bg-gradient text-white">
-              <h4 class="modal-title">Select Location</h4>
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+              <h4 class="modal-title">Filer departments</h4>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                aria-label="Close"></button>
             </div>
             <div class="modal-body text-start">
               <label for="selectDepartmentLocation"></label>
               <select id="selectDepartmentLocation" class="form-select"></select>
             </div>
-             <div class="modal-footer">
-              <button type="button" class="btn btn-outline-primary btn-sm myBtn" id="applyFilterDepartment">APPLY</button>
+            <div class="modal-footer">
               <button type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
             </div>
           </div>
         </div>
       </div>
-      
+
 
       <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
@@ -470,15 +466,16 @@
   </div>
 
   <!--Delete Personnel, Departments & Locations-->
-  <div id="deletePersonnelModal" class="modal fade">
+  <div id="deletePersonnelModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
 
 
     <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
 
       <div class="modal-content shadow">
 
-        <div class="modal-header bg-danger bg-gradient text-white">
-          <h5 class="modal-title">Delete employee</h5>
+        <div class="modal-header bg-primary bg-gradient text-white">
+          <h5 class="modal-title">Remove employee entry?</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
@@ -488,7 +485,7 @@
 
             <input type="hidden" id="deletePersonnelEmployee">
 
-            <p>Would you like to delete <span id="employeeName"></span>?</p>
+            <p>Are you sure that you want to remove the entry for <strong><span id="employeeName"></span></strong>?</p>
 
 
           </form>
@@ -505,34 +502,73 @@
     </div>
 
   </div>
+  <div id="deleteLocationModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
 
-  <div id="deleteDepartmentModal" class="modal fade">
+  
+    <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+         
+      <div class="modal-content shadow"> 
+        
+        <div class="modal-header bg-danger bg-gradient text-white">
+          <h5 class="modal-title">Remove location?</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+  
+        <div class="modal-body">
+  
+          <form id="deleteLocationForm">
+  
+            <input type="hidden" id="deleteLocationID">
+  
+            <p id="checkLocation"></p>
+  
+          </form>
+  
+        </div>
+  
+        <div class="modal-footer">
+          <button type="submit" form="deleteLocationForm" class="btn btn-outline-danger btn-sm myBtn" id="yesLocationButton">YES</button>
+          <button type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal" id="cancelLocationButton">CANCEL</button>
+          <button type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal" id="okLocationButton" style="display: none;">OK</button>
+        </div>
+   
+      </div>
+      
+    </div>
+    
+  </div>
+  
+  <div id="deleteDepartmentModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
 
 
     <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
 
       <div class="modal-content shadow">
 
-        <div class="modal-header bg-danger bg-gradient text-white">
-          <h5 class="modal-title">Delete department</h5>
+        <div class="modal-header bg-primary bg-gradient text-white">
+          <h5 class="modal-title">Remove department?</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-
         <div class="modal-body">
 
           <form id="deleteDepartmentForm">
 
-            <input type="hidden" id="deleteDepartmentID">
+            <input id="deleteDepartmentID" type="hidden">
+            <p id="checkDepartment"></p>
 
-            <p>Would you like to delete <span id="deleteDepartmentName"></span>?</p>
-
-          </form>
-
+          <form>
         </div>
 
+
         <div class="modal-footer">
-          <button type="submit" form="deleteDepartmentForm" class="btn btn-outline-danger btn-sm myBtn">YES</button>
-          <button type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+          <button type="submit" form="deleteDepartmentForm" class="btn btn-outline-danger btn-sm myBtn"
+            id="yesDepartmentButton">YES</button>
+          <button type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal"
+            id="okDepartmentButton" style="display: none;">OK</button>
+          <button type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal"
+            id="cancelDepartmentButton">CANCEL</button>
         </div>
 
       </div>
@@ -540,43 +576,7 @@
     </div>
 
   </div>
-
-  <div id="deleteLocationModal" class="modal fade">
-
-
-    <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
-
-      <div class="modal-content shadow">
-
-        <div class="modal-header bg-danger bg-gradient text-white">
-          <h5 class="modal-title">Delete location</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-
-        <div class="modal-body">
-
-          <form id="deleteLocationForm">
-            <input type="hidden" id="deleteLocationID">
-
-
-
-            <p>Would you like to delete <span id="deleteLocationName"></span>?</p>
-
-
-          </form>
-
-        </div>
-
-        <div class="modal-footer">
-          <button type="submit" form="deleteLocationForm" class="btn btn-outline-danger btn-sm myBtn">YES</button>
-          <button type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
+  
 
 
 
@@ -584,5 +584,8 @@
   <script src="js\jquery.min.js"></script>
   <script src="js\script.js"></script>
 </body>
+
+
+
 
 </html>

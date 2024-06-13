@@ -1,8 +1,9 @@
 <?php
 
-	
+	// example use from browser
+	// http://localhost/companydirectory/libs/php/searchAll.php?txt=<txt>
 
-	// remove next two lines for production	
+	// remove next two lines for production
 	
 	ini_set('display_errors', 'On');
 	error_reporting(E_ALL);
@@ -31,13 +32,18 @@
 
 	}	
 
-	// SQL does not accept parameters and so is not prepared
+	// first query - SQL statement accepts parameters and so is prepared to avoid SQL injection.
+	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
-	$query = 'SELECT id, name FROM location ORDER BY name';
+	$query = $conn->prepare('SELECT `id`, `name` FROM `location` WHERE `id` LIKE ? OR `name` LIKE ? ORDER BY `name`');
 
-	$result = $conn->query($query);
+  $likeText = "%" . $_REQUEST['txt'] . "%";
+
+  $query->bind_param("ss", $likeText, $likeText);
+
+	$query->execute();
 	
-	if (!$result) {
+	if (false === $query) {
 
 		$output['status']['code'] = "400";
 		$output['status']['name'] = "executed";
@@ -51,12 +57,14 @@
 		exit;
 
 	}
-   
-  $data = [];
+    
+	$result = $query->get_result();
+
+  $found = [];
 
 	while ($row = mysqli_fetch_assoc($result)) {
 
-		array_push($data, $row);
+		array_push($found, $row);
 
 	}
 
@@ -64,7 +72,7 @@
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "success";
 	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-	$output['data'] = $data;
+	$output['data']['found'] = $found;
 	
 	mysqli_close($conn);
 
