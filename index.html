@@ -54,20 +54,28 @@
         <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content shadow">
             <div class="modal-header bg-primary bg-gradient text-white">
-              <h4 class="modal-title">Filter employees</h4>
+              <h5 class="modal-title">Filter employees</h5>
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                 aria-label="Close"></button>
             </div>
             <div class="modal-body">
-
-              <label for="selectPersonnelDepartment"></label>
+              
+              <div class="form-floating">
+              
               <select id="selectPersonnelDepartment" class="form-select"></select>
+              <label for="selectPersonnelDepartmentLocation">Select Department</label>
+              </div>
+              <br>
 
-              <label for="selectPersonnelLocation"></label>
+             <div class="form-floating">
               <select id="selectPersonnelLocation" class="form-select"></select>
+              <label for="selectPersonnelLocation">Select Location</label>
+              </div>
+            
+              
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+              <button type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">CLOSE</button>
             </div>
           </div>
         </div>
@@ -79,16 +87,18 @@
         <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content shadow">
             <div class="modal-header bg-primary bg-gradient text-white">
-              <h4 class="modal-title">Filer departments</h4>
+              <h4 class="modal-title">Filter departments</h4>
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                 aria-label="Close"></button>
             </div>
-            <div class="modal-body text-start">
-              <label for="selectDepartmentLocation"></label>
+            <div class="modal-body">
+              <div class = "form-floating">
               <select id="selectDepartmentLocation" class="form-select"></select>
+              <label for="selectDepartmentLocation">Select location</label>
+            </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+              <button type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">CLOSE</button>
             </div>
           </div>
         </div>
@@ -502,6 +512,7 @@
     </div>
 
   </div>
+  
   <div id="deleteLocationModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false"
   aria-labelledby="exampleModalLabel" aria-hidden="true">
 

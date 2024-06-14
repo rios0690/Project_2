@@ -9,6 +9,9 @@ $(document).ready(function () {
   populateList();
 
 });
+var currentfilterDepartmentSelect;
+var currentfilterLocationSelect;
+var currentfilterDepartment;
 $("#searchInp").on("keyup", function () {
   var txt = $("#searchInp").val();
   $("#personnelTableBody").empty();
@@ -24,11 +27,11 @@ $("#searchInp").on("keyup", function () {
       dataType: "json",
       data: { txt },
       success: function (result) {
-  
+
         var resultCode = result.status.code;
-  
+
         console.log(resultCode);
-  
+
         if (resultCode == 200) {
           result.data.found.forEach(function (result) {
             var name = result.lastName + ", " + result.firstName;
@@ -69,7 +72,8 @@ $("#searchInp").on("keyup", function () {
           });
 
         }
-      }})
+      }
+    })
   } else if ($("#departmentsBtn").hasClass("active")) {
     $.ajax({
       url: "libs/php/searchDepartments.php",
@@ -77,47 +81,48 @@ $("#searchInp").on("keyup", function () {
       dataType: "json",
       data: { txt },
       success: function (result) {
-  
+
         var resultCode = result.status.code;
-  
+
         console.log(resultCode);
-  
+
         if (resultCode == 200) {
           result.data.found.forEach(function (result) {
             var name = result.name;
-                var id = result.id;
-                var location = result.location;
-                var locationID = result.locationID;
+            var id = result.id;
+            var location = result.location;
+            var locationID = result.locationID;
 
-                var row = $("<tr>");
-                row.append($("<td>").text(name).addClass("align-middle text-nowrap"));
-                row.append($("<td>").text(location).addClass("align-middle text-nowrap d-none d-md-table-cell"));
-                row.attr("data-location-id", locationID);
+            var row = $("<tr>");
+            row.append($("<td>").text(name).addClass("align-middle text-nowrap"));
+            row.append($("<td>").text(location).addClass("align-middle text-nowrap d-none d-md-table-cell"));
+            row.attr("data-location-id", locationID);
 
-                var buttonsCell = $("<td>").addClass("text-end text-nowrap");
-                var editButton = $("<button>").addClass("btn btn-primary btn-sm me-2")
-                  .attr("type", "button")
-                  .attr("data-bs-toggle", "modal")
-                  .attr("data-bs-target", "#editDepartmentModal")
-                  .attr("data-id", id)
-                  .html('<i class="fa-solid fa-pencil fa-fw"></i>');
+            var buttonsCell = $("<td>").addClass("text-end text-nowrap");
+            var editButton = $("<button>").addClass("btn btn-primary btn-sm me-2")
+              .attr("type", "button")
+              .attr("data-bs-toggle", "modal")
+              .attr("data-bs-target", "#editDepartmentModal")
+              .attr("data-id", id)
+              .html('<i class="fa-solid fa-pencil fa-fw"></i>');
 
-                var deleteButton = $("<button>").addClass("btn btn-primary btn-sm me-2 ")
-                  .attr("type", "button")
-                  .attr("data-bs-toggle", "modal")
-                  .attr("data-bs-target", "#deleteDepartmentModal")
-                  .attr("data-id", id)
-                  .html('<i class="fa-solid fa-trash fa-fw"></i>');
+            var deleteButton = $("<button>").addClass("btn btn-primary btn-sm me-2 ")
+              .attr("type", "button")
+              .attr("data-bs-toggle", "modal")
+              .attr("data-bs-target", "#deleteDepartmentModal")
+              .attr("data-id", id)
+              .html('<i class="fa-solid fa-trash fa-fw"></i>');
 
-                buttonsCell.append(editButton, deleteButton);
-                row.append(buttonsCell);
+            buttonsCell.append(editButton, deleteButton);
+            row.append(buttonsCell);
 
-                departmentTableBody.append(row);
+            departmentTableBody.append(row);
 
           })
-          
+
         }
-      }})
+      }
+    })
 
   } else if ($("#locationsBtn").hasClass("active")) {
 
@@ -127,43 +132,44 @@ $("#searchInp").on("keyup", function () {
       dataType: "json",
       data: { txt },
       success: function (result) {
-  
+
         var resultCode = result.status.code;
-  
+
         console.log(resultCode);
-  
+
         if (resultCode == 200) {
           result.data.found.forEach(function (result) {
-                var name = result.name;
-                var id = result.id;
-                
+            var name = result.name;
+            var id = result.id;
 
-                var row = $("<tr>");
-                row.append($("<td>").text(name).addClass("align-middle text-nowrap"));
-                
 
-                var buttonsCell = $("<td>").addClass("text-end text-nowrap");
-                var editButton = $("<button>").addClass("btn btn-primary btn-sm me-2")
-                  .attr("type", "button")
-                  .attr("data-bs-toggle", "modal")
-                  .attr("data-bs-target", "#editDepartmentModal")
-                  .attr("data-id", id)
-                  .html('<i class="fa-solid fa-pencil fa-fw"></i>');
+            var row = $("<tr>");
+            row.append($("<td>").text(name).addClass("align-middle text-nowrap"));
 
-                var deleteButton = $("<button>").addClass("btn btn-primary btn-sm me-2 ")
-                  .attr("type", "button")
-                  .attr("data-bs-toggle", "modal")
-                  .attr("data-bs-target", "#deleteDepartmentModal")
-                  .attr("data-id", id)
-                  .html('<i class="fa-solid fa-trash fa-fw"></i>');
 
-                buttonsCell.append(editButton, deleteButton);
-                row.append(buttonsCell);
+            var buttonsCell = $("<td>").addClass("text-end text-nowrap");
+            var editButton = $("<button>").addClass("btn btn-primary btn-sm me-2")
+              .attr("type", "button")
+              .attr("data-bs-toggle", "modal")
+              .attr("data-bs-target", "#editDepartmentModal")
+              .attr("data-id", id)
+              .html('<i class="fa-solid fa-pencil fa-fw"></i>');
 
-                locationTableBody.append(row);
-        })
-      }}
-  })
+            var deleteButton = $("<button>").addClass("btn btn-primary btn-sm me-2 ")
+              .attr("type", "button")
+              .attr("data-bs-toggle", "modal")
+              .attr("data-bs-target", "#deleteDepartmentModal")
+              .attr("data-id", id)
+              .html('<i class="fa-solid fa-trash fa-fw"></i>');
+
+            buttonsCell.append(editButton, deleteButton);
+            row.append(buttonsCell);
+
+            locationTableBody.append(row);
+          })
+        }
+      }
+    })
 
   }
 })
@@ -173,12 +179,15 @@ $("#refreshBtn").click(function () {
   if ($("#personnelBtn").hasClass("active")) {
 
     populateList();
+    currentfilterDepartmentSelect='';
+    currentfilterLocationSelect='';
 
   } else {
 
     if ($("#departmentsBtn").hasClass("active")) {
 
       populateDepartments();
+      currentfilterDepartment = '';
 
     } else {
 
@@ -196,9 +205,11 @@ $("#filterBtn").click(function () {
     $("#filterPersonnelModal").modal("show");
     $("#selectPersonnelDepartment").empty();
     $("#selectPersonnelLocation").empty();
+
     //Populate Departments
+    
     $("#selectPersonnelDepartment").append($('<option>', {
-      text: 'Select Department',
+      text: 'All',
       value: ''
     }));
     $.ajax({
@@ -208,7 +219,7 @@ $("#filterBtn").click(function () {
       dataType: "json",
       success: function (result) {
         var resultCode = result.status.code;
-
+  
         if (resultCode == 200) {
           console.log(result.data);
           $.each(result.data, function () {
@@ -219,12 +230,13 @@ $("#filterBtn").click(function () {
               })
             );
           });
+          $("#selectPersonnelDepartment").val(currentfilterDepartmentSelect); 
         }
       }
     });
     //Populate Locations
     $("#selectPersonnelLocation").append($('<option>', {
-      text: 'Select Location',
+      text: 'All',
       value: ''
     }));
 
@@ -244,8 +256,11 @@ $("#filterBtn").click(function () {
                 value: this.id,
                 text: this.name
               })
+               
             );
           });
+          $("#selectPersonnelLocation").val(currentfilterLocationSelect);
+          
         }
       }
     });
@@ -256,9 +271,9 @@ $("#filterBtn").click(function () {
 
     if ($("#departmentsBtn").hasClass("active")) {
       $("#filterDepartmentModal").modal("show");
-      $("#selectDepartmentLocation").empty();
+      $("#selectDepartmentLocation").empty;
       $("#selectDepartmentLocation").append($('<option>', {
-        text: 'Select Location',
+        text: 'All',
         value: ''
       }));
 
@@ -280,6 +295,7 @@ $("#filterBtn").click(function () {
                 })
               );
             });
+            $("#selectDepartmentLocation").val(currentfilterDepartment)
           }
         }
       });
@@ -294,21 +310,25 @@ $("#filterBtn").click(function () {
 $("#selectPersonnelDepartment").change(function () {
 
   if (this.value > 0) {
+    $("#selectPersonnelLocation").val('');
 
-    $("#applyFilterPersonnel").val(0);
+
     $("#personnelTableBody").empty();
+    $("#selectPersonnelDepartment").empty;
+    
+
 
     var txt = $("#selectPersonnelDepartment").find(":selected").text();
     var tableBody = $("#personnelTableBody");
-
+    currentfilterDepartmentSelect = $('#selectPersonnelDepartment').val(); 
 
     $.ajax({
-      url: "libs/php/SearchAll.php",
+      url: "libs/php/searchAll.php",
       type: "POST",
       dataType: "json",
       data: { txt },
       success: function (result) {
-        $("#filterPersonnelModal").modal("hide");
+        //$("#filterPersonnelModal").modal("hide");
 
         var resultCode = result.status.code;
 
@@ -367,11 +387,14 @@ $("#selectPersonnelDepartment").change(function () {
 $("#selectPersonnelLocation").change(function () {
 
   if (this.value > 0) {
+    $("#selectPersonnelDepartment").val('');
 
-    $("#applyFilterPersonnel").val(0);
     $("#personnelTableBody").empty();
+    $("#selectPersonnelLocation").empty;
     var txt = $("#selectPersonnelLocation").find(":selected").text();
     var tableBody = $("#personnelTableBody");
+    currentfilterLocationSelect = $('#selectPersonnelLocation').val(); 
+    
 
 
     $.ajax({
@@ -380,7 +403,7 @@ $("#selectPersonnelLocation").change(function () {
       dataType: "json",
       data: { txt },
       success: function (result) {
-        $("#filterPersonnelModal").modal("hide");
+        //$("#filterPersonnelModal").modal("hide");
 
         var resultCode = result.status.code;
 
@@ -433,6 +456,7 @@ $("#selectPersonnelLocation").change(function () {
       }
 
     })
+    
 
 
   }
@@ -442,6 +466,7 @@ $("#selectDepartmentLocation").change(function () {
   $("#departmentTableBody").empty();
   var txt = $("#selectDepartmentLocation").find(":selected").text();
   var tableBody = $("#departmentTableBody");
+  currentfilterDepartment = $("#selectDepartmentLocation").val();
   $.ajax({
     url:
       "libs/php/getAllDepartments.php",
@@ -452,7 +477,7 @@ $("#selectDepartmentLocation").change(function () {
 
       if (resultCode == 200) {
         console.log(result.data);
-        $("#filterDepartmentModal").modal("hide");
+       
         $.each(result.data, function (index) {
           if (txt == result.data[index].location) {
             var name = result.data[index].name;
@@ -497,6 +522,7 @@ $("#selectDepartmentLocation").change(function () {
 
     }
   });
+  
 })
 
 $("#addBtn").click(function () {
@@ -592,6 +618,8 @@ $('#addDepartmentModal').on('show.bs.modal', function () {
 $("#personnelBtn").click(function () {
   $("#filterBtn").attr("disabled", false);
   populateList();
+  currentfilterDepartmentSelect='';
+  currentfilterLocationSelect='';
 
 
 });
@@ -599,6 +627,8 @@ $("#personnelBtn").click(function () {
 $("#departmentsBtn").click(function () {
   $("#filterBtn").attr("disabled", false);
   populateDepartments();
+  currentfilterDepartment = '';
+  
 
 });
 
@@ -914,7 +944,7 @@ $("#addPersonnelForm").on("submit", function (e) {
 
 })
 $("#deletePersonnelModal").on("show.bs.modal", function (e) {
-  
+
   $.ajax({
     url:
       "libs/php/getPersonnelByID.php",
@@ -1210,7 +1240,7 @@ $("#deleteDepartmentForm").on("submit", function (e) {
 
 //EDIT, ADD & DELETE Location list
 $("#editLocationModal").on("show.bs.modal", function (e) {
-populateLocations();
+  populateLocations();
   $.ajax({
     url:
       "libs/php/getLocationByID.php",
